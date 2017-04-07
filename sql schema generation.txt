@@ -1,0 +1,278 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+
+-- -----------------------------------------------------
+-- Schema lab3
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema lab3
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `lab3` DEFAULT CHARACTER SET utf8 ;
+USE `lab3` ;
+
+-- -----------------------------------------------------
+-- Table `lab3`.`customer`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `lab3`.`customer` (
+  `Customer_SK` INT(11) NOT NULL AUTO_INCREMENT COMMENT '',
+  `CUSTID` INT(11) NOT NULL COMMENT '',
+  `NAME` VARCHAR(50) NULL DEFAULT NULL COMMENT '',
+  `Address` VARCHAR(100) NULL DEFAULT NULL COMMENT '',
+  `CITY` VARCHAR(50) NULL DEFAULT NULL COMMENT '',
+  `STATE` CHAR(2) NULL DEFAULT NULL COMMENT '',
+  `ZIP` CHAR(45) NULL DEFAULT NULL COMMENT '',
+  `CUSTTYPE` CHAR(1) NULL DEFAULT NULL COMMENT '',
+  `TYPENAME` VARCHAR(45) NULL DEFAULT NULL COMMENT '',
+  `DivID` VARCHAR(45) NULL DEFAULT NULL COMMENT '',
+  `Startdate` DATE NULL COMMENT '',
+  `Enddate` DATE NULL COMMENT '',
+  `Old name` VARCHAR(45) NULL COMMENT '',
+  PRIMARY KEY (`Customer_SK`)  COMMENT '')
+ENGINE = InnoDB
+AUTO_INCREMENT = 120
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `lab3`.`miscellaneous`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `lab3`.`miscellaneous` (
+  `misc_SK` INT(11) NOT NULL AUTO_INCREMENT COMMENT '',
+  `ID` INT(11) NOT NULL COMMENT '',
+  `shipMethod` VARCHAR(45) NULL DEFAULT NULL COMMENT '',
+  `paymentMethod` VARCHAR(45) NULL DEFAULT NULL COMMENT '',
+  `orderMethod` VARCHAR(45) NULL DEFAULT NULL COMMENT '',
+  PRIMARY KEY (`misc_SK`)  COMMENT '')
+ENGINE = InnoDB
+AUTO_INCREMENT = 38
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `lab3`.`orderdate`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `lab3`.`orderdate` (
+  `OrderDate_SK` INT(11) NOT NULL AUTO_INCREMENT COMMENT '',
+  `orderDate` DATE NULL DEFAULT NULL COMMENT '',
+  `Year` YEAR NULL DEFAULT NULL COMMENT '',
+  `Month` INT(11) NULL DEFAULT NULL COMMENT '',
+  `Quarter` VARCHAR(45) NULL DEFAULT NULL COMMENT '',
+  `Fiscalyear` VARCHAR(45) NULL DEFAULT NULL COMMENT '',
+  `fiscalMonth` VARCHAR(45) NULL DEFAULT NULL COMMENT '',
+  `FiscalQuarter` VARCHAR(45) NULL DEFAULT NULL COMMENT '',
+  PRIMARY KEY (`OrderDate_SK`)  COMMENT '')
+ENGINE = InnoDB
+AUTO_INCREMENT = 2158
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `lab3`.`product`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `lab3`.`product` (
+  `Product_SK` INT(11) NOT NULL AUTO_INCREMENT COMMENT '',
+  `ProductID` INT(11) NOT NULL COMMENT '',
+  `ProductName` VARCHAR(45) NULL DEFAULT NULL COMMENT '',
+  `PRODTYPEID` VARCHAR(45) NULL DEFAULT NULL COMMENT '',
+  `TYPEDESCRIPTION` VARCHAR(45) NULL DEFAULT NULL COMMENT '',
+  `BUID` CHAR(1) NULL DEFAULT NULL COMMENT '',
+  `divisionID` INT(11) NULL DEFAULT NULL COMMENT '',
+  `BUAbbrev` VARCHAR(45) NULL DEFAULT NULL COMMENT '',
+  `BUName` VARCHAR(45) NULL DEFAULT NULL COMMENT '',
+  PRIMARY KEY (`Product_SK`)  COMMENT '')
+ENGINE = InnoDB
+AUTO_INCREMENT = 299
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `lab3`.`saledate`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `lab3`.`saledate` (
+  `SaleDate_SK` INT(11) NOT NULL AUTO_INCREMENT COMMENT '',
+  `salesDate` DATE NULL DEFAULT NULL COMMENT '',
+  `Year` YEAR NULL DEFAULT NULL COMMENT '',
+  `Month` VARCHAR(45) NULL DEFAULT NULL COMMENT '',
+  `quarter` VARCHAR(45) NULL DEFAULT NULL COMMENT '',
+  `fiscalYear` VARCHAR(45) NULL DEFAULT NULL COMMENT '',
+  `fiscalMonth` VARCHAR(45) NULL DEFAULT NULL COMMENT '',
+  `fiscalQuarter` VARCHAR(45) NULL DEFAULT NULL COMMENT '',
+  PRIMARY KEY (`SaleDate_SK`)  COMMENT '')
+ENGINE = InnoDB
+AUTO_INCREMENT = 2496
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `lab3`.`supplier`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `lab3`.`supplier` (
+  `Supplier_SK` INT(11) NOT NULL AUTO_INCREMENT COMMENT '',
+  `supplierID` INT(11) NOT NULL COMMENT '',
+  `Name` VARCHAR(50) NULL DEFAULT NULL COMMENT '',
+  `SupplierAddr1` VARCHAR(50) NULL DEFAULT NULL COMMENT '',
+  `SupplierAddr2` VARCHAR(50) NULL DEFAULT NULL COMMENT '',
+  `City` VARCHAR(50) NULL DEFAULT NULL COMMENT '',
+  `State` CHAR(2) NULL DEFAULT NULL COMMENT '',
+  `ZIP` CHAR(5) NULL DEFAULT NULL COMMENT '',
+  PRIMARY KEY (`Supplier_SK`)  COMMENT '')
+ENGINE = InnoDB
+AUTO_INCREMENT = 11
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `lab3`.`salesfact`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `lab3`.`salesfact` (
+  `InvoiceiD` VARCHAR(45) NOT NULL COMMENT '',
+  `Customer_SK` INT(11) NOT NULL COMMENT '',
+  `OrderDate_SK` INT(11) NOT NULL COMMENT '',
+  `SaleDate_SK` INT(11) NOT NULL DEFAULT '0' COMMENT '',
+  `Product_SK` INT(11) NOT NULL COMMENT '',
+  `Supplier_SK` INT(11) NOT NULL COMMENT '',
+  `misc_SK` INT(11) NOT NULL COMMENT '',
+  `amt` DECIMAL(10,2) NULL DEFAULT NULL COMMENT '',
+  `qty` DECIMAL(8,2) NULL DEFAULT NULL COMMENT '',
+  `discounted` INT(11) NULL DEFAULT NULL COMMENT '',
+  `daysToComplete` INT(11) NULL DEFAULT NULL COMMENT '',
+  `UnitCost` DECIMAL(10,2) NULL DEFAULT NULL COMMENT '',
+  `Price` VARCHAR(45) NULL DEFAULT NULL COMMENT '',
+  PRIMARY KEY (`Customer_SK`, `OrderDate_SK`, `SaleDate_SK`, `Product_SK`, `Supplier_SK`, `misc_SK`, `InvoiceiD`)  COMMENT '',
+  INDEX `OrderDate_SK_idx` (`OrderDate_SK` ASC)  COMMENT '',
+  INDEX `SaleDate_SK_idx` (`SaleDate_SK` ASC)  COMMENT '',
+  INDEX `Product_SK_idx` (`Product_SK` ASC)  COMMENT '',
+  INDEX `Supplier_SK_idx` (`Supplier_SK` ASC)  COMMENT '',
+  INDEX `misc_SK_idx` (`misc_SK` ASC)  COMMENT '',
+  CONSTRAINT `Customer_SK`
+    FOREIGN KEY (`Customer_SK`)
+    REFERENCES `lab3`.`customer` (`Customer_SK`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `OrderDate_SK`
+    FOREIGN KEY (`OrderDate_SK`)
+    REFERENCES `lab3`.`orderdate` (`OrderDate_SK`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `SaleDate_SK`
+    FOREIGN KEY (`SaleDate_SK`)
+    REFERENCES `lab3`.`saledate` (`SaleDate_SK`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `Product_SK`
+    FOREIGN KEY (`Product_SK`)
+    REFERENCES `lab3`.`product` (`Product_SK`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `Supplier_SK`
+    FOREIGN KEY (`Supplier_SK`)
+    REFERENCES `lab3`.`supplier` (`Supplier_SK`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `misc_SK`
+    FOREIGN KEY (`misc_SK`)
+    REFERENCES `lab3`.`miscellaneous` (`misc_SK`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `lab3`.`shipping comp`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `lab3`.`shipping comp` (
+  `Shipping_SK` INT(11) NOT NULL COMMENT '',
+  `SupplierID` VARCHAR(45) NOT NULL COMMENT '',
+  `Name` VARCHAR(45) NULL DEFAULT NULL COMMENT '',
+  `Addr1` VARCHAR(50) NULL DEFAULT NULL COMMENT '',
+  `Addr2` VARCHAR(50) NULL DEFAULT NULL COMMENT '',
+  `City` VARCHAR(50) NULL DEFAULT NULL COMMENT '',
+  `State` VARCHAR(2) NULL DEFAULT NULL COMMENT '',
+  `Zip` VARCHAR(5) NULL DEFAULT NULL COMMENT '',
+  PRIMARY KEY (`Shipping_SK`)  COMMENT '')
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `lab3`.`supplierbridge`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `lab3`.`supplierbridge` (
+  `Shipping_SK` INT(11) NOT NULL COMMENT '',
+  `Supplier_SK` INT(11) NOT NULL COMMENT '',
+  `Weighing factor` INT NULL DEFAULT NULL COMMENT '',
+  `supplierbridgecol` VARCHAR(45) NULL COMMENT '',
+  PRIMARY KEY (`Shipping_SK`, `Supplier_SK`)  COMMENT '',
+  INDEX `Supplier_SK_idx` (`Supplier_SK` ASC)  COMMENT '',
+  CONSTRAINT `Shipping_SK`
+    FOREIGN KEY (`Shipping_SK`)
+    REFERENCES `lab3`.`shipping comp` (`Shipping_SK`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `Supplier_SK`
+    FOREIGN KEY (`Supplier_SK`)
+    REFERENCES `lab3`.`supplier` (`Supplier_SK`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+USE `lab3` ;
+
+-- -----------------------------------------------------
+-- Placeholder table for view `lab3`.`sales`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `lab3`.`sales` (`CUSTTYPE` INT, `STATE` INT, `TYPEDESCRIPTION` INT, `BUID` INT);
+
+-- -----------------------------------------------------
+-- Placeholder table for view `lab3`.`salesdata`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `lab3`.`salesdata` (`CUSTTYPE` INT, `STATE` INT, `TYPEDESCRIPTION` INT, `BUID` INT);
+
+-- -----------------------------------------------------
+-- Placeholder table for view `lab3`.`salesdescription`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `lab3`.`salesdescription` (`CUSTTYPE` INT, `STATE` INT, `TYPEDESCRIPTION` INT, `BUID` INT);
+
+-- -----------------------------------------------------
+-- Placeholder table for view `lab3`.`test`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `lab3`.`test` (`CUSTTYPE` INT, `STATE` INT, `TYPEDESCRIPTION` INT, `BUID` INT);
+
+-- -----------------------------------------------------
+-- View `lab3`.`sales`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `lab3`.`sales`;
+USE `lab3`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `lab3`.`sales` AS select `lab3`.`customer`.`CUSTTYPE` AS `CUSTTYPE`,`lab3`.`customer`.`STATE` AS `STATE`,`lab3`.`product`.`TYPEDESCRIPTION` AS `TYPEDESCRIPTION`,`lab3`.`product`.`BUID` AS `BUID` from (`lab3`.`customer` join `lab3`.`product`);
+
+-- -----------------------------------------------------
+-- View `lab3`.`salesdata`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `lab3`.`salesdata`;
+USE `lab3`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `lab3`.`salesdata` AS select `lab3`.`customer`.`CUSTTYPE` AS `CUSTTYPE`,`lab3`.`customer`.`STATE` AS `STATE`,`lab3`.`product`.`TYPEDESCRIPTION` AS `TYPEDESCRIPTION`,`lab3`.`product`.`BUID` AS `BUID` from (`lab3`.`customer` join `lab3`.`product`);
+
+-- -----------------------------------------------------
+-- View `lab3`.`salesdescription`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `lab3`.`salesdescription`;
+USE `lab3`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `lab3`.`salesdescription` AS select `lab3`.`customer`.`CUSTTYPE` AS `CUSTTYPE`,`lab3`.`customer`.`STATE` AS `STATE`,`lab3`.`product`.`TYPEDESCRIPTION` AS `TYPEDESCRIPTION`,`lab3`.`product`.`BUID` AS `BUID` from (`lab3`.`customer` join `lab3`.`product`) where (`lab3`.`product`.`ProductID` = 4);
+
+-- -----------------------------------------------------
+-- View `lab3`.`test`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `lab3`.`test`;
+USE `lab3`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `lab3`.`test` AS select `lab3`.`customer`.`CUSTTYPE` AS `CUSTTYPE`,`lab3`.`customer`.`STATE` AS `STATE`,`lab3`.`product`.`TYPEDESCRIPTION` AS `TYPEDESCRIPTION`,`lab3`.`product`.`BUID` AS `BUID` from (`lab3`.`customer` join `lab3`.`product`);
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+ 
